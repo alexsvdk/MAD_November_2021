@@ -6,18 +6,23 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:worlds_factory/api/api.dart';
 import 'package:worlds_factory/api/models/api_error.dart';
+import 'package:worlds_factory/dao/questions_repository.dart';
 
 import 'model.dart';
 
 final dictionaryScreenControllerProvider = StateNotifierProvider.autoDispose<
         DictionaryScreenController, DictionaryScreenModel>(
-    (ref) => DictionaryScreenController(ref.watch(apiProvider)));
+    (ref) => DictionaryScreenController(
+          ref.watch(apiProvider),
+          ref.watch(questionsRepositoryProvider),
+        ));
 
 class DictionaryScreenController extends StateNotifier<DictionaryScreenModel> {
+  final QuestionsRepository _repository;
   final Api _api;
   final AudioPlayer _player = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
 
-  DictionaryScreenController(this._api)
+  DictionaryScreenController(this._api, this._repository)
       : super(DictionaryScreenModel(
           null,
           null,
@@ -43,5 +48,7 @@ class DictionaryScreenController extends StateNotifier<DictionaryScreenModel> {
     _player.play('https:' + url);
   }
 
-  void saveWord() {}
+  void saveWord() {
+    _repository.addWord(state.data!.first);
+  }
 }

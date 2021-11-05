@@ -10,6 +10,7 @@ const kH1TextStyle = TextStyle(
 );
 
 const kH4TextStyle = TextStyle(
+  color: Colors.black,
   fontFamily: 'Rubik',
   fontWeight: FontWeight.w500,
   fontSize: 24,
@@ -31,6 +32,9 @@ final kInputDecoration = InputDecoration(
 
 class KColors {
   static const primary = Color.fromARGB(255, 227, 86, 42);
+  static const error = Color.fromARGB(255, 239, 73, 73);
+  static const waiting = Color.fromARGB(255, 242, 160, 63);
+  static const success = Color.fromARGB(255, 91, 160, 146);
   static const secondary = Color.fromARGB(255, 101, 170, 234);
   static const grey = Color.fromARGB(255, 120, 116, 109);
 }

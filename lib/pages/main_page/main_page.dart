@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:worlds_factory/common.dart';
 import 'package:worlds_factory/pages/dictionary_screen/discionary_screen.dart';
+import 'package:worlds_factory/pages/questions_screen.dart/view.dart';
 import 'package:worlds_factory/pages/video_screen/video_screen.dart';
 
 class MainPage extends HookWidget {
@@ -9,7 +10,7 @@ class MainPage extends HookWidget {
 
   static const _bodyes = [
     DictionaryScreen(),
-    SizedBox.shrink(),
+    QuestionsScreen(),
     VideoScreen(),
   ];
 

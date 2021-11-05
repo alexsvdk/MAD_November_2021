@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:worlds_factory/common.dart';
 import 'package:worlds_factory/pages/launch_page/launch_page.dart';
+import 'package:worlds_factory/pages/main_page/main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LaunchPage(),
+      home: const MainPage(),
     );
   }
 }
