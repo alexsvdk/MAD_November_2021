@@ -62,7 +62,9 @@ class QuestionsScreen extends HookWidget {
               ]),
             ),
             if (countdown.value > 5)
-              KButton('Start', onClick: _startAnimation)
+              questionsRepo.wordsCount > 0
+                  ? KButton('Start', onClick: _startAnimation)
+                  : Text('Add words to start training')
             else
               Stack(
                 alignment: Alignment.center,

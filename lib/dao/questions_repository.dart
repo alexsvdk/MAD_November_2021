@@ -17,37 +17,38 @@ class QuestionsRepository {
     _init();
   }
 
-  final _initCompleter = Completer();
+  Completer? _initCompleter = Completer();
   late final SharedPreferences _spref;
 
   final _translations = <String, Translation>{};
   var _scores = <String, int>{};
-
-  Future get init => _initCompleter.future;
   int get wordsCount => _scores.length;
 
   Future<void> _init() async {
     _spref = await SharedPreferences.getInstance();
     _loadTranslations();
-    _initCompleter.complete();
+    _initCompleter?.complete();
+    _initCompleter = null;
   }
 
   void _loadTranslations() {
     if (_spref.containsKey(_translationsKey)) {
-      final raw = jsonDecode(_spref.getString(_translationsKey)!)
-          as Map<String, Map<String, dynamic>>;
+      final raw = jsonDecode(jsonDecode(_spref.getString(_translationsKey)!));
       raw.forEach((key, value) => _translations[key] = Translation
           .fromWordCatPhoneticKatPhoneticsTextKatAudioSslGstaticComDictionaryStaticSounds20200429CatGb1Mp3OriginOldEnglishCattCatteOfGermanicOriginRelatedToDutchKatAndGermanKatzeReinforcedInMiddleEnglishByFormsFromLateLatinCattusMeaningsPartOfSpeechNounDefinitionsDefinitionASmallDomesticatedCarnivorousMammalWithSoftFurAShortSnoutAndRetractableClawsItIsWidelyKeptAsAPetOrForCatchingMiceAndManyBreedsHaveBeenDevelopedSynonymsFelinePussycatPussyPussKittyKittyCatKittenTiddlesTibblesTomTomcatTabbyGingerTortoiseshellMarmaladeCatMouserHouseCatWildCatAlleyCatMoggieMogFurBabyFurKidGrimalkinAntonymsDefinitionEspeciallyAmongJazzEnthusiastsAManExampleThisWestCoastCatHadManagedHimSinceTheEarly80sSynonymsAntonymsDefinitionAShortTaperedStickUsedInTheGameOfTipcatSynonymsAntonymsPartOfSpeechVerbDefinitionsDefinitionRaiseAnAnchorFromTheSurfaceOfTheWaterToTheCatheadExampleIKeptHerOffTheWindAndSailingFreeUntilIHadTheAnchorCattedSynonymsAntonyms(
               value));
     }
     if (_spref.containsKey(_scoreKey)) {
-      final raw = jsonDecode(_spref.getString(_scoreKey)!);
-      _scores = raw as Map<String, int>;
+      final raw =
+          jsonDecode(_spref.getString(_scoreKey)!) as Map<String, dynamic>;
+      raw.forEach((key, value) {
+        _scores[key] = value as int;
+      });
     }
   }
 
   Future<void> _save() async {
-    await init;
+    await _initCompleter?.future;
     final raw = <String, Map<String, dynamic>>{};
     _translations.forEach((key, value) {
       raw[key] = value
@@ -55,6 +56,7 @@ class QuestionsRepository {
     });
     await _spref.setString(_translationsKey, jsonEncode(jsonEncode(raw)));
     await _spref.setInt(_sizeKey, _translations.length);
+    await _spref.setString(_scoreKey, jsonEncode(_scores));
   }
 
   Future<void> addWord(Translation translation) async {
@@ -66,7 +68,7 @@ class QuestionsRepository {
   }
 
   Future<List<Translation>> getTest() async {
-    await init;
+    await _initCompleter?.future;
     var keys = (_scores.entries.toList()
           ..sort((a, b) => a.value.compareTo(b.value)))
         .map((e) => e.key)
