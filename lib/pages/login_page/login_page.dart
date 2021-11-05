@@ -69,8 +69,17 @@ class LoginPage extends HookWidget {
               height: 16,
             ),
             TextField(
+              obscureText: !showPassword.value,
               controller: passwordController,
-              decoration: kInputDecoration.copyWith(hintText: 'Password'),
+              decoration: kInputDecoration.copyWith(
+                  hintText: 'Password',
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        showPassword.value = !showPassword.value;
+                      },
+                      icon: Image.asset(showPassword.value
+                          ? 'assets/images/v.png'
+                          : 'assets/images/inv.png'))),
             ),
             const SizedBox(
               height: 16,
