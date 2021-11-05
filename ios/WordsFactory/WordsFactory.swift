@@ -8,6 +8,7 @@
 import WidgetKit
 import SwiftUI
 import Intents
+import simd
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
@@ -44,7 +45,18 @@ struct WordsFactoryEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        Text(entry.date, style: .time)
+        VStack{
+            Spacer()
+            Text("WordsFactory")
+            Spacer()
+            HStack{
+                Text("My Dictionary: ")
+                Spacer()
+                Text("322")
+            }
+            
+            Spacer()
+        }.padding(10)
     }
 }
 
@@ -53,7 +65,7 @@ struct WordsFactory: Widget {
     let kind: String = "WordsFactory"
 
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider() ) { entry in
             WordsFactoryEntryView(entry: entry)
         }
         .configurationDisplayName("My Widget")
