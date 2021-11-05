@@ -12,11 +12,12 @@ import simd
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent())
+        SimpleEntry(count: 322,date: Date(), configuration: ConfigurationIntent())
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), configuration: configuration)
+        let data = UserDefaults().value(forKey: "size") as? Int
+        let entry = SimpleEntry(count: data ?? 422,date: Date(), configuration: configuration)
         completion(entry)
     }
 
@@ -25,9 +26,10 @@ struct Provider: IntentTimelineProvider {
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
+ 
         for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
+            let entryDate = Calendar.current.date(byAdding: .minute, value: hourOffset, to: currentDate)!
+            let entry = SimpleEntry(count: 322,date: entryDate, configuration: configuration)
             entries.append(entry)
         }
 
@@ -37,6 +39,7 @@ struct Provider: IntentTimelineProvider {
 }
 
 struct SimpleEntry: TimelineEntry {
+    let count: Int
     let date: Date
     let configuration: ConfigurationIntent
 }
@@ -52,7 +55,7 @@ struct WordsFactoryEntryView : View {
             HStack{
                 Text("My Dictionary: ")
                 Spacer()
-                Text("322")
+                Text("\(entry.count)")
             }
             
             Spacer()
@@ -75,7 +78,7 @@ struct WordsFactory: Widget {
 
 struct WordsFactory_Previews: PreviewProvider {
     static var previews: some View {
-        WordsFactoryEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
+        WordsFactoryEntryView(entry: SimpleEntry(count: 322, date: Date(), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
